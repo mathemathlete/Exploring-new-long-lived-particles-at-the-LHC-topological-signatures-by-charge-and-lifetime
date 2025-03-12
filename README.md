@@ -12,3 +12,9 @@ Host sbgli2.in2p3.fr
     User xmadre
     ProxyCommand ssh xmadre@sbgli2.in2p3.fr -W %h:%p
     ProxyCommand cd /opt/sbg/cms/safe1/cms/xmadre/ 
+
+
+
+
+ssh xmadre@sbgli2.in2p3.fr
+ssh xmadre@sbgui2.in2p3.fr

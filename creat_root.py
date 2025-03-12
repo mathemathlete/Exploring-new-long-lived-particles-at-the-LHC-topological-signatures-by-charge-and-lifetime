@@ -23,24 +23,18 @@ def root_file(file_name):
         mean=ak.mean(data["Tracks.pt"])
         std= ak.std(data["Tracks.pt"])
 
-    return mean, std, masse, charge
+    return charge,masse, mean, std
 
 
 def multiprocess(file_list):
     with Pool(processes=num_cores) as pool:
         results = pool.map(root_file, file_list)
-    mean = [mean for mean in results if mean is not None]
-    std = [std for std in results if std is not None]
-    masse = [masse for masse in results if masse is not None]
-    charge = [charge for charge in results if charge is not None] 
+    vector = [vector for vector in results if vector is not None]
+   
+    vector = np.array(vector)
 
-
-    indexed_means = np.array(mean)
-    indexed_std = np.array(std)
-    indexed_mass = np.array(masse)
-    indexed_charge = np.array(charge)
-
-    return indexed_means, indexed_std, indexed_mass, indexed_charge
+    print(vector)
+    return vector
 
 
 
@@ -49,11 +43,11 @@ if __name__ == "__main__":
 
 
 
-    mean,std,mass,charge = multiprocess(file_list)
-    print(mean)
+    vector= multiprocess(file_list)
+
+    print(vector[:,0])
     with uproot.recreate(output_file) as f:
-        # f["mean_pt"] = {"mean_pt": np.array(list(mean), dtype=np.float32)}  
-        f["tree"] = { "charge" : charge, "mass": mass, "mean_pt" : mean, "std" :std}
+        f["tree"] = { "charge" : vector[:,0], "mass": vector[:,1], "mean_pt" : vector[:,2], "std_pt" :vector[:,3]}
 
 
 
